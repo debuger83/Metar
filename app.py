@@ -1,17 +1,19 @@
 import os
 import asyncio
-from flask import Flask, request, jsonify
-from playwright.async_api import async_playwright
 import re
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from playwright.async_api import async_playwright
 
 app = Flask(__name__)
+CORS(app)
 
 async def get_metar(cities):
     url = "https://global.amo.go.kr/obsMetar/ObsMetar.do"
-    metar_results = {}
-
+    results = {}
+    
     async with async_playwright() as p:
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(headless=True)
         context = await browser.new_context()
         page = await context.new_page()
         await page.goto(url)
@@ -25,26 +27,21 @@ async def get_metar(cities):
 
             if result:
                 metar_data = result.group(1)
-                metar_results[city] = metar_data
+                results[city] = metar_data
             else:
-                metar_results[city] = "결과를 찾을 수 없습니다."
+                results[city] = "결과를 찾을 수 없습니다."
 
         await context.close()
         await browser.close()
 
-    return metar_results
-
-@app.route('/')
-def index():
-    return "Welcome to the METAR API. Use /api/metar to query METAR data."
+    return results
 
 @app.route('/api/metar', methods=['POST'])
-async def api_metar():
+def metar_api():
     data = request.get_json()
     cities = data.get('cities', [])
-
-    metar_results = await get_metar(cities)
-
+    loop = asyncio.get_event_loop()
+    metar_results = loop.run_until_complete(get_metar(cities))
     return jsonify(metar_results)
 
 if __name__ == "__main__":
