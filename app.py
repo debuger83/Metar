@@ -34,6 +34,10 @@ async def get_metar(cities):
 
     return metar_results
 
+@app.route('/')
+def index():
+    return "Welcome to the METAR API. Use /api/metar to query METAR data."
+
 @app.route('/api/metar', methods=['POST'])
 async def api_metar():
     data = request.get_json()
