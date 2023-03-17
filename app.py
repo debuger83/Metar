@@ -41,5 +41,5 @@ def metar():
     metar_results = loop.run_until_complete(get_metar(cities))
     return jsonify(metar_results)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
