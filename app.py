@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify
+import os
 import asyncio
+from flask import Flask, request, jsonify
 from playwright.async_api import async_playwright
 import re
 
@@ -10,7 +11,7 @@ async def get_metar(cities):
     metar_results = {}
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch()
         context = await browser.new_context()
         page = await context.new_page()
         await page.goto(url)
@@ -34,11 +35,12 @@ async def get_metar(cities):
     return metar_results
 
 @app.route('/api/metar', methods=['POST'])
-def metar():
-    cities = request.json.get('cities', [])
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    metar_results = loop.run_until_complete(get_metar(cities))
+async def api_metar():
+    data = request.get_json()
+    cities = data.get('cities', [])
+
+    metar_results = await get_metar(cities)
+
     return jsonify(metar_results)
 
 if __name__ == "__main__":
