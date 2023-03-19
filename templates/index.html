@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metar Information</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Get METAR Information</h1>
+    <p>Enter ICAO airport code:</p>
+    <input type="text" id="airport_code" placeholder="ICAO Code">
+    <button id="submit_button">Get METAR</button>
+    <div id="result"></div>
+    <script>
+        $(document).ready(function() {
+            $('#submit_button').click(function() {
+                let airport_code = $('#airport_code').val();
+                if (airport_code) {
+                    $.ajax({
+                        url: "https://web-production-21d3d.up.railway.app/get_metar",
+                        method: "POST",
+                        data: JSON.stringify({ "airport_code": airport_code }),
+                        contentType: "application/json",
+                        success: function(data) {
+                            $("#result").html("<pre>" + data + "</pre>");
+                        },
+                        error: function(err) {
+                            $("#result").html("<pre>Error: " + err.responseText + "</pre>");
+                        }
+                    });
+                } else {
+                    alert("Please enter a valid ICAO airport code.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
