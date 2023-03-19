@@ -1,25 +1,17 @@
-<!doctype html>
-<html lang="ko">
-  <head>
-    <title>Metar 정보 추출하기</title>
-  </head>
-  <body>
-    <h1>Metar 정보 추출하기</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>도시</th>
-          <th>Metar</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for result in results %}
-        <tr>
-          <td>{{ result.city }}</td>
-          <td>{{ result.metar }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Metar 정보 가져오기</title>
+</head>
+<body>
+	<h1>Metar 정보</h1>
+	<table>
+		{% for city, data in results %}
+		<tr>
+			<td>{{ city }}</td>
+			<td>{{ data }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</body>
 </html>
