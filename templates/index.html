@@ -1,17 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>김포공항 METAR</title>
+    <title>Get METAR Data</title>
 </head>
 <body>
-    <h1>김포공항 METAR 정보</h1>
-    <form method="post">
-        <button type="submit">METAR 정보 가져오기</button>
-    </form>
-    {% if gimpo_metar %}
-    <p>{{ gimpo_metar }}</p>
-    {% endif %}
-</body>
-</html>
+    <form method="POST" action="/get_metar">
+        <label for="city">도시 이름:</label>
+        <br>
+        <select id="city" name="city" multiple>
+            <option value="김포공항">김포공항</option>
+            <option value="인천공항">인천공항</option>
+            <option value="청주공항">청주공항</option>
+            <option value="대전공항">대전공항</option>
+            <option value="광주공항">광주공항</option>
+            <option value="울산공항">울산공항</option>
+            <option value="부산공항">부산공항</option>
+            <option value="대구공항">대구공항</option>
+            <option value="포항경주공항">포항경주공항</option>
+            <option value="예천공항">예천공항</option>
+        </select>
+        <br>
+        <button type="submit">METAR 데이터 가져오기</button>
