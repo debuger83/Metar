@@ -1,3 +1,2 @@
-Flask
-playwright
-flask_cors
+Flask==2.1.1
+requests-html==0.10.0
